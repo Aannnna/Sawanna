@@ -1,19 +1,26 @@
 package pl.altkom;
 
+import pl.altkom.animals.*;
 import pl.altkom.plants.Acacia;
 import pl.altkom.plants.Grass;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.function.UnaryOperator;
 
 public class Savanna {
     private Cell[][] cells;
     private int rows;
     private int cols;
+    private List<Animal> animals;
+    private List<Animal> preys;
 
-    public Savanna(int rows, int cols, int trees) {
+
+    public Savanna(int rows, int cols, int trees, int giraffes, int zebras, int lions) {
         this.rows = rows;
         this.cols = cols;
+        this.animals = new ArrayList<>();
+        this.preys = new ArrayList<>();
         Random random = new Random();
         cells = new Cell[rows][cols];
         for (int i = 0; i < trees; i++) {
@@ -32,19 +39,72 @@ public class Savanna {
                 }
             }
         }
+
+
+        for (int i = 0; i < zebras; i++) {
+            int r = random.nextInt(rows);
+            int c = random.nextInt(cols);
+            Zebra zebra = new Zebra(r, c);
+            animals.add(zebra);
+            getConcreteCell(r, c).getCellAnimals().add(zebra);
+        }
+
+        for (int i = 0; i < giraffes; i++) {
+            int r = random.nextInt(rows);
+            int c = random.nextInt(cols);
+            Giraffe giraffe = new Giraffe(r, c);
+            animals.add(giraffe);
+            getConcreteCell(r, c).getCellAnimals().add(giraffe);
+        }
+
+        for (int i = 0; i < lions; i++) {
+            int r = random.nextInt(rows);
+            int c = random.nextInt(cols);
+            Lion lion = new Lion(r, c);
+            animals.add(lion);
+            getConcreteCell(r, c).getCellAnimals().add(lion);
+
+        }
+
+    }
+
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public Cell getConcreteCell(int r, int c) {
+        return cells[r][c];
+    }
+
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public List<Animal> getAnimals() {
+        return animals;
+    }
+    public List<Animal> getPreys() {
+        return preys;
     }
 
     public void oneDay() {
         for (int c = 0; c < cols; c++) {
-            for (int r = 0; r < rows; r++){
+            for (int r = 0; r < rows; r++) {
                 cells[r][c].getPlant().grow();
             }
         }
-    }
-
-    private void forEach(UnaryOperator<Cell> f) {
+        System.out.println("roślinki urosły");
 
     }
 
+    @Override
+    public String toString() {
+        return "Zwierzęta" + animals;
+    }
 }
-
